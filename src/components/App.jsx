@@ -14,6 +14,22 @@ export class App extends Component {
     filter: '',
   };
 
+  // Під час завантаження застосунку контакти, якщо такі є, зчитуються з локального сховища і записуються у стан.
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  // Під час додавання та видалення контакту контакти зберігаються у локальне сховище.
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   formSubmitHandler = data => {
     const { contacts } = this.state;
 
